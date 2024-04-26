@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import Home from "./pages/home";
+import Login from "./pages/logIn";
 import "./App.css";
 
 function App() {
@@ -7,14 +9,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* <Route index element={<Home />} /> */}
-          <Route path="/" element={<Home />} />
-          {/* <Route path="/admin/add/products" element={<AdminAddProduct />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/orders" element={<AdminOrdersView />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/login" element={<Login />} /> */}
+          <Route index element={<Login />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </div>
     </Router>
