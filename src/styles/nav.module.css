@@ -1,19 +1,38 @@
-.logo {
-  font-size: 2rem;
+/* nav.module.css */
+.navContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  /* Full height of the viewport */
+  width: 200px;
+  /* Set width of sidebar */
+  display: flex;
+  flex-direction: column;
+  padding-top: none;
 }
 
-.container {
-  display: flex;
-  justify-content: flex-start;
-  padding: 2rem;
-  font-size: 1.5rem;
-  border-right: 1px solid white;
-  flex-direction: row;
+.navLinks {
+  list-style-type: none;
+  padding: 3rem;
 }
 
 .links {
   padding: 2rem;
-  list-style: none;
-  padding-right: 5rem;
-  border-right: 2px solid grey;
+  font-size: 1.5rem;
+}
+
+.logo {
+  font-size: 2rem;
+  margin: 1;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+.link:hover {
+  color: grey;
 }

@@ -1,22 +1,18 @@
+// nav.js
 import Styles from "../styles/nav.module.css";
 import { IoHomeSharp } from "react-icons/io5";
 
-function nav() {
+function Nav() {
   return (
-    <div className={Styles.container}>
+    <div className={Styles.navContainer}>
       <ul className={Styles.navLinks}>
         <h1 className={Styles.logo}>StoryStream</h1>
         <li className={Styles.links}>
-          <a className={Styles.link}>
-            {" "}
-            <IoHomeSharp />
-            Home
-          </a>
+          <a className={Styles.link}> Home</a>
         </li>
         <li className={Styles.links}>
           <a className={Styles.link}>Post</a>
         </li>
-
         <li className={Styles.links}>
           <a className={Styles.link}>Message</a>
         </li>
@@ -28,4 +24,4 @@ function nav() {
   );
 }
 
-export default nav;
+export default Nav;

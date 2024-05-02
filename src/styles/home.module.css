@@ -1,4 +1,12 @@
-/* * {
-  background-color: black;
-  color: white;
-} */
+.postContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem;
+  padding: 5rem;
+}
+
+.posts {
+  padding: 1rem;
+}
