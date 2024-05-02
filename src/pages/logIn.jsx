@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
+import { Link } from "react-router-dom";
+
 import Styles from "../styles/login.module.css";
 const onFinish = (values) => {
   console.log("Success:", values);
@@ -26,7 +28,7 @@ const Login = () => (
           className={Styles.formItem}
           label="Username"
           name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          // rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />
         </Form.Item>
@@ -40,6 +42,12 @@ const Login = () => (
         </Form.Item>
         <Form.Item
           className={Styles.formItem}
+          wrapperCol={{ offset: 8, span: 16 }}
+        >
+          <Link to="/signup">Sign up</Link>
+        </Form.Item>
+        <Form.Item
+          className={Styles.formItem}
           name="remember"
           valuePropName="checked"
           wrapperCol={{ offset: 8, span: 16 }}
@@ -48,7 +56,7 @@ const Login = () => (
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            <Link to="/home">Log in </Link>
           </Button>
         </Form.Item>
       </Form>

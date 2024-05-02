@@ -1,8 +1,13 @@
+import Styles from "../styles/home.module.css";
+import Nav from "../components/nav";
+
 function home() {
   return (
-    <div>
-      <h1>home</h1>
-    </div>
+    <>
+      <div className={Styles.container}>
+        <Nav />
+      </div>
+    </>
   );
 }
 

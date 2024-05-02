@@ -1,0 +1,19 @@
+.logo {
+  font-size: 2rem;
+}
+
+.container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 2rem;
+  font-size: 1.5rem;
+  border-right: 1px solid white;
+  flex-direction: row;
+}
+
+.links {
+  padding: 2rem;
+  list-style: none;
+  padding-right: 5rem;
+  border-right: 2px solid grey;
+}

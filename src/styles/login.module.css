@@ -1,26 +1,27 @@
 /* Login.module.css */
-.login-container {
+.loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.form-container {
-  max-width: 400px; /* Adjust the width of the form container as needed */
-  padding: 20px;
+.formContainer {
+  background-color: white;
+  max-width: 400px;
+  padding: 30px;
   border: 1px solid #eaeaea;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.form-title {
+.formTitle {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.form-item {
+.formItem {
   margin-bottom: 16px;
 }
 
