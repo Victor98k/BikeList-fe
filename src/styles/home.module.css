@@ -3,10 +3,50 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 2rem;
+
   padding: 5rem;
+  border-bottom: 1px solid grey;
+  background-color: black; /* Set background color to black */
+  color: white; /* Set text color to white */
 }
 
 .posts {
   padding: 1rem;
+  margin-bottom: 2rem; /* Add space between posts */
+  width: 25rem;
+  height: auto; /* Adjust height to be auto so it grows with content */
+  border: 1px solid #ccc; /* Add a border to each post */
+  border-radius: 8px; /* Optional: rounded corners */
+  background-color: #f9f9f9; /* Light background for each post */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+  color: black; /* Ensure text inside posts is readable against light background */
+}
+
+.postImage {
+  width: 100%; /* Adjust to fill the container width */
+  max-height: 400px; /* Limit the image height */
+  object-fit: cover;
+  margin-bottom: 1rem; /* Space between image and text/content */
+}
+
+.commentSection {
+  margin-top: 1rem; /* Space above the comment section */
+  padding-top: 1rem;
+  border-top: 1px solid #eee; /* Visual separation of comments from post content */
+}
+
+/* New styles for pagination */
+.pagination {
+  color: white; /* Set text color to white for visibility */
+  background-color: rgba(255, 255, 255, 0.1); /* Slightly visible background */
+}
+
+.ant-pagination-item,
+.ant-pagination-item-link {
+  border-color: white; /* White borders for pagination items */
+}
+
+.ant-pagination-item a,
+.ant-pagination-item-link {
+  color: white; /* White text for pagination numbers and controls */
 }

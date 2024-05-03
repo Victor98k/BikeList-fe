@@ -4,9 +4,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  /* Full height of the viewport */
   width: 200px;
-  /* Set width of sidebar */
   display: flex;
   flex-direction: column;
   padding-top: none;
@@ -30,7 +28,7 @@
 .link {
   display: block;
   text-decoration: none;
-  color: black;
+  color: white;
 }
 
 .link:hover {
