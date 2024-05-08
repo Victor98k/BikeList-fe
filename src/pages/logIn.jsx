@@ -1,67 +1,71 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Checkbox } from "antd";
+import apiKit from "../utils/ApiKit";
+import localStorageKit from "../utils/LocalStorageKit";
+import styles from "../styles/login.module.css";
 
-import Styles from "../styles/login.module.css";
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
+function Login() {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+  const onFinish = (values) => {
+    setError(null);
+    const { email, password } = values;
 
-const Login = () => (
-  <div className={Styles.loginContainer}>
-    <div className={Styles.formContainer}>
-      <h1 className={Styles.formTitle}>Login</h1>
+    apiKit
+      .post("http://localhost:8080/auth/login", { email, password })
+      .then((response) => {
+        const { tokens } = response.data;
+        localStorageKit.setTokenInStorage(tokens.access);
+        navigate("/home");
+      })
+      .catch((error) => {
+        const message = error.response.data.message;
+        console.warn("Error logging in", message);
+        setError(message);
+      });
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/signup");
+  };
+
+  return (
+    <div className={styles.loginContainer}>
       <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
+        name="loginForm"
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        className={styles.formContainer}
       >
-        <Form.Item
-          className={Styles.formItem}
-          label="Username"
-          name="username"
-          // rules={[{ required: true, message: "Please input your username!" }]}
-        >
-          <Input />
+        <Form.Item>
+          <h1>Story Stream</h1>
         </Form.Item>
         <Form.Item
-          className={Styles.formItem}
-          label="Password"
+          name="email"
+          rules={[{ required: true, message: "Please input your Email!" }]}
+        >
+          <Input placeholder="Email" />
+        </Form.Item>
+        <Form.Item
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Password" />
         </Form.Item>
-        <Form.Item
-          className={Styles.formItem}
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <Link to="/signup">Sign up</Link>
-        </Form.Item>
-        <Form.Item
-          className={Styles.formItem}
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <Checkbox className={Styles.checkbox}>Remember me</Checkbox>
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        {error && <p>{error}</p>}
+        <Form.Item>
           <Button type="primary" htmlType="submit">
-            <Link to="/home">Log in </Link>
+            Login
+          </Button>
+          <Button type="link" onClick={handleRegisterClick}>
+            Register
           </Button>
         </Form.Item>
       </Form>
     </div>
-  </div>
-);
+  );
+}
 
 export default Login;

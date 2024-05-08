@@ -37,11 +37,11 @@ function Nav({ onPostCreated }) {
     });
 
     if (response.ok) {
-      const newPost = await response.json(); // Define newPost with the response data
+      const newPost = await response.json();
 
       console.log("New post created successfully");
       setIsModalVisible(false);
-      onPostCreated(newPost); // Pass the new post data to the callback function
+      onPostCreated(newPost);
     } else {
       console.error("Failed to create new post");
     }

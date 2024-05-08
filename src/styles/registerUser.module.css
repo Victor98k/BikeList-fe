@@ -1,0 +1,25 @@
+.registerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.formContainer {
+  background-color: white;
+  max-width: 400px;
+  padding: 30px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.formItem {
+  margin-bottom: 16px;
+}
