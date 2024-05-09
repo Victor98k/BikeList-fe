@@ -14,7 +14,10 @@ function Login() {
     const { email, password } = values;
 
     apiKit
-      .post("http://localhost:8080/auth/login", { email, password })
+      .post("/auth/login", {
+        email,
+        password,
+      })
       .then((response) => {
         const { tokens, user } = response.data;
         localStorageKit.setTokenInStorage(tokens.access);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Input } from "antd";
 import Styles from "../styles/nav.module.css";
+import apiKit from "../utils/ApiKit"; // Import apiKit
 
 function Nav({ onPostCreated }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,29 +32,27 @@ function Nav({ onPostCreated }) {
       return;
     }
 
-    const response = await fetch("http://localhost:8080/posts/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
+    // Use apiKit for the POST request
+    try {
+      const response = await apiKit.post("/posts/post", {
         title,
         description,
         imageUrl,
         location,
         author: userId,
-      }),
-    });
+      });
 
-    if (response.ok) {
-      const newPost = await response.json();
-      alert("New post created successfully!");
-      setIsModalVisible(false);
-      onPostCreated(newPost);
-    } else {
-      const errorData = await response.json();
-      alert(`Failed to create new post: ${errorData.error}`);
+      if (response.status === 200) {
+        // Check for status 200 explicitly
+        const newPost = response.data;
+        alert("New post created successfully!");
+        setIsModalVisible(false);
+        onPostCreated(newPost);
+      } else {
+        alert(`Failed to create new post: ${response.data.error}`);
+      }
+    } catch (error) {
+      alert(`Failed to create new post: ${error.message}`);
     }
   };
 

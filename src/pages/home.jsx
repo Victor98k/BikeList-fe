@@ -17,7 +17,7 @@ function Home(props) {
 
   useEffect(() => {
     apiKit
-      .get("http://localhost:8080/posts")
+      .get("/posts") // Updated to use base URL from apiKit
       .then((response) => {
         const sortedPosts = response.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -49,7 +49,8 @@ function Home(props) {
     }
 
     try {
-      const response = await apiKit.post("http://localhost:8080/comments", {
+      const response = await apiKit.post("/comments", {
+        // Updated to use base URL from apiKit
         text: comment,
         postId: postId,
         author: username,
