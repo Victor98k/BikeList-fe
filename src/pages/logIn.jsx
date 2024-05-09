@@ -19,15 +19,17 @@ function Login() {
         password,
       })
       .then((response) => {
+        console.log(response);
         const { tokens, user } = response.data;
         localStorageKit.setTokenInStorage(tokens.access);
         localStorage.setItem("userId", user.id);
-
         localStorage.setItem("username", user.username);
         navigate("/home");
       })
       .catch((error) => {
-        const message = error.response.data.message;
+        console.error("Login error:", error);
+        const message =
+          error.response?.data?.message || "An unexpected error occurred";
         console.warn("Error logging in", message);
         setError(message);
       });
