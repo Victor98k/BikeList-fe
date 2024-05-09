@@ -19,17 +19,25 @@ function Login() {
         password,
       })
       .then((response) => {
-        console.log(response);
+        console.log(response); // Log the response
+        if (!response.data) {
+          throw new Error("No data received from server");
+        }
         const { tokens, user } = response.data;
+        if (!tokens || !user) {
+          throw new Error("Incomplete data received from server");
+        }
         localStorageKit.setTokenInStorage(tokens.access);
         localStorage.setItem("userId", user.id);
         localStorage.setItem("username", user.username);
         navigate("/home");
       })
       .catch((error) => {
-        console.error("Login error:", error);
+        console.error("Login error:", error); // Log the entire error
         const message =
-          error.response?.data?.message || "An unexpected error occurred";
+          error.response?.data?.message ||
+          error.message ||
+          "An unexpected error occurred";
         console.warn("Error logging in", message);
         setError(message);
       });
