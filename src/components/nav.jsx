@@ -1,60 +1,65 @@
 import React, { useState } from "react";
 import { Modal, Button, Input } from "antd";
 import Styles from "../styles/nav.module.css";
-import { IoHomeSharp } from "react-icons/io5";
 
 function Nav({ onPostCreated }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [newPostContent, setNewPostContent] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [location, setLocation] = useState("");
-  const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState(localStorage.getItem("userId") || "");
 
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   const handleOk = async () => {
-    // Check if author is a valid ObjectId
-    if (!isValidObjectId(author)) {
-      console.error("Invalid author ID");
+    const accessToken = localStorage.getItem("STORAGE_TOKEN_KEY");
+    console.log("Access Token:", accessToken);
+
+    if (!accessToken) {
+      alert("No access token available. Please log in.");
       return;
     }
 
-    const response = await fetch("http://localhost:8080/post", {
+    const userId = localStorage.getItem("userId");
+    console.log("User ID:", userId);
+
+    if (!userId) {
+      alert("User ID is missing.");
+      return;
+    }
+
+    const response = await fetch("http://localhost:8080/posts/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
-        title: title,
-        content: description,
-        imageUrl: imageUrl,
-        location: location,
-        author: author,
+        title,
+        description,
+        imageUrl,
+        location,
+        author: userId,
       }),
     });
 
     if (response.ok) {
       const newPost = await response.json();
-
-      console.log("New post created successfully");
+      alert("New post created successfully!");
       setIsModalVisible(false);
       onPostCreated(newPost);
     } else {
-      console.error("Failed to create new post");
+      const errorData = await response.json();
+      alert(`Failed to create new post: ${errorData.error}`);
     }
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
-  // Function to validate ObjectId
-  function isValidObjectId(id) {
-    return /^[0-9a-fA-F]{24}$/.test(id);
-  }
 
   return (
     <div className={Styles.navContainer}>
@@ -97,11 +102,6 @@ function Nav({ onPostCreated }) {
           placeholder="Location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-        />
-        <Input
-          placeholder="Author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
         />
       </Modal>
     </div>

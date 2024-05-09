@@ -3,26 +3,26 @@ import apiKit from "../utils/ApiKit";
 import localStorageKit from "../utils/LocalStorageKit";
 import Nav from "../components/nav";
 import styles from "../styles/home.module.css";
-import { List, Avatar, Input, Button } from "antd";
+import { List, Avatar, Input, Button, Card } from "antd";
 import { Comment } from "@ant-design/compatible";
-import { clearToken } from "../utils/LocalStorageKit";
 import { useNavigate } from "react-router-dom";
 
 function Home(props) {
-  const [books, setBooks] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [commentText, setCommentText] = useState({});
-  const [showAllComments, setShowAllComments] = useState(false);
-
+  const [expandedComments, setExpandedComments] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     apiKit
       .get("http://localhost:8080/posts")
       .then((response) => {
-        setAllPosts(response.data);
+        const sortedPosts = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setAllPosts(sortedPosts);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -35,49 +35,66 @@ function Home(props) {
     setCommentText((prev) => ({ ...prev, [postId]: text }));
   };
 
-  const handleCommentSubmit = async (postId, text, author) => {
+  const handleCommentSubmit = async (postId) => {
     const comment = commentText[postId];
     if (!comment) {
       console.log("No comment text found, not submitting.");
       return;
     }
 
+    const username = localStorage.getItem("username");
+    if (!username) {
+      console.error("User not found, please log in.");
+      return;
+    }
+
     try {
-      console.log("Submitting comment:", comment);
-      const response = await apiKit.post("/comments", {
+      const response = await apiKit.post("http://localhost:8080/comments", {
         text: comment,
         postId: postId,
-        author: author,
+        author: username,
       });
 
-      if (response.status === 200) {
-        const newComment = response.data;
-        console.log("Comment submitted successfully:", newComment);
-        setAllPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (post._id === postId) {
-              return { ...post, comments: [...post.comments, newComment] };
-            }
-            return post;
-          })
-        );
+      if (response.status === 201) {
         setCommentText((prev) => ({ ...prev, [postId]: "" }));
+
+        setAllPosts((currentPosts) => {
+          const index = currentPosts.findIndex((post) => post._id === postId);
+          const updatedPost = {
+            ...currentPosts[index],
+            comments: [...currentPosts[index].comments, response.data],
+          };
+          return [
+            ...currentPosts.slice(0, index),
+            updatedPost,
+            ...currentPosts.slice(index + 1),
+          ];
+        });
       } else {
         console.error("Failed to submit comment");
       }
     } catch (error) {
-      console.error("Error submitting comment:", error.message);
+      console.error("Failed to submit comment", error);
     }
   };
 
   const handleLogOut = () => {
     localStorageKit.deleteTokenFromStorage();
+    localStorage.removeItem("username");
     navigate("/");
   };
 
+  const handlePostCreated = (newPost) => {
+    setAllPosts((prevPosts) => {
+      const updatedPosts = [newPost, ...prevPosts];
+      return updatedPosts.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    });
+  };
   return (
     <div className={styles.postContainer}>
-      <Nav />
+      <Nav onPostCreated={handlePostCreated} />{" "}
       <Button onClick={handleLogOut}>Log Out</Button>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
@@ -92,20 +109,61 @@ function Home(props) {
         }}
         dataSource={allPosts}
         renderItem={(post) => (
-          <List.Item key={post._id} className={styles.posts}>
-            <List.Item.Meta
-              avatar={<Avatar src={post.authorAvatar} />}
-              title={<a href={post.href}>{post.title}</a>}
-              description={post.description}
-            />
-            <ul>
-              <li>Title: {post.title}</li>
-
-              <li>
-                <img src={post.imageUrl} alt="" />
-              </li>
-            </ul>
-          </List.Item>
+          <Card
+            key={post._id}
+            title={<h3>{post.title}</h3>}
+            className={styles.posts}
+          >
+            <p>{post.description}</p>
+            <img src={post.imageUrl} alt="" className={styles.postImage} />
+            <div className={styles.commentSection}>
+              {post.comments
+                .slice(0, expandedComments[post._id] ? post.comments.length : 2)
+                .map((comment) => {
+                  const initial = comment.author
+                    ? comment.author.charAt(0).toUpperCase()
+                    : "U";
+                  return (
+                    <Comment
+                      key={comment._id}
+                      author={<p>{comment.author}</p>}
+                      avatar={
+                        <Avatar
+                          src={`https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`}
+                        />
+                      }
+                      content={<p>{comment.text}</p>}
+                    />
+                  );
+                })}
+              {post.comments.length > 2 && (
+                <a
+                  onClick={() => {
+                    setExpandedComments((prev) => ({
+                      ...prev,
+                      [post._id]: !prev[post._id],
+                    }));
+                  }}
+                >
+                  {expandedComments[post._id]
+                    ? "See less comments"
+                    : "See all comments"}
+                </a>
+              )}
+              <Input
+                placeholder="Add a comment..."
+                value={commentText[post._id] || ""}
+                onChange={(e) => handleCommentChange(post._id, e.target.value)}
+                onPressEnter={() => handleCommentSubmit(post._id)}
+              />
+              <Button
+                type="primary"
+                onClick={() => handleCommentSubmit(post._id)}
+              >
+                Submit Comment
+              </Button>
+            </div>
+          </Card>
         )}
       />
     </div>

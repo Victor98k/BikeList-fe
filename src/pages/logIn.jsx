@@ -16,8 +16,11 @@ function Login() {
     apiKit
       .post("http://localhost:8080/auth/login", { email, password })
       .then((response) => {
-        const { tokens } = response.data;
+        const { tokens, user } = response.data;
         localStorageKit.setTokenInStorage(tokens.access);
+        localStorage.setItem("userId", user.id);
+
+        localStorage.setItem("username", user.username);
         navigate("/home");
       })
       .catch((error) => {
