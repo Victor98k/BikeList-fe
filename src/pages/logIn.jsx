@@ -19,7 +19,7 @@ function Login() {
         password,
       })
       .then((response) => {
-        console.log(response); // Log the response
+        console.log("Login response:", response.data); // This will show what you're receiving from the server
         if (!response.data) {
           throw new Error("No data received from server");
         }

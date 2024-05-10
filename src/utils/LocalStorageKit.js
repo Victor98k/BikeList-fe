@@ -5,8 +5,9 @@ class LocalStorageKit {
   STORAGE_USERNAME_KEY = "username";
 
   setTokenInStorage(token) {
-    localStorage.setItem(this.STORAGE_TOKEN_KEY, JSON.stringify(token));
-    apiKit.defaults.headers.common["Authorization"] = `Bearer ${token.access}`;
+    console.log("Setting token in storage:", token); // This will confirm what you are trying to store
+    localStorage.setItem(this.STORAGE_TOKEN_KEY, token);
+    apiKit.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
   getTokenFromStorage() {
