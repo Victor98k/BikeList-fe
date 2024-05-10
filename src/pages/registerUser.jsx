@@ -16,6 +16,7 @@ const Register = () => {
     };
 
     apiKit
+      // why no work?
       .post("/auth/register", JSON.stringify(payload), {
         headers: {
           "Content-Type": "application/json",
