@@ -11,7 +11,8 @@ function Login() {
 
   const handleSubmit = (values) => {
     apiKit
-      .post("http://localhost:8080/auth/login", values)
+      // .post("http://localhost:8080/auth/login", values)
+      .post("https://storystream-fe.onrender.com/auth/login", values)
       .then((response) => {
         const { tokens, user } = response.data;
         if (!tokens || !tokens.access) {

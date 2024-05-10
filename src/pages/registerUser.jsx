@@ -17,7 +17,8 @@ const Register = () => {
 
     apiKit
       // why no work?
-      .post("http://localhost:8080/auth/register", JSON.stringify(payload), {
+      // .post("http://localhost:8080/auth/register", JSON.stringify(payload), {
+      .post("https://storystream-fe.onrender.com", JSON.stringify(payload), {
         headers: {
           "Content-Type": "application/json",
         },
