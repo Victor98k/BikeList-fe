@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Input, message } from "antd"; // Import message from antd
 import Styles from "../styles/nav.module.css";
 import apiKit from "../utils/ApiKit"; // Import apiKit
+import logo from "../assets/logo.png";
 
 function Nav({ onPostCreated }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,6 +64,7 @@ function Nav({ onPostCreated }) {
     <div className={Styles.navContainer}>
       <ul className={Styles.navLinks}>
         <h1 className={Styles.logo}>StoryStream</h1>
+
         <li className={Styles.links}>
           <a className={Styles.link} onClick={showModal}>
             Post

@@ -135,16 +135,18 @@ function Home(props) {
                     ? comment.author.charAt(0).toUpperCase()
                     : "U";
                   return (
-                    <Comment
-                      key={comment._id}
-                      author={<p>{comment.author}</p>}
-                      avatar={
-                        <Avatar
-                          src={`https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`}
-                        />
-                      }
-                      content={<p>{comment.text}</p>}
-                    />
+                    <div className={styles.commentContainer}>
+                      <Comment
+                        key={comment._id}
+                        author={<p>{comment.author}</p>}
+                        avatar={
+                          <Avatar
+                            src={`https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`}
+                          />
+                        }
+                        content={<p>{comment.text}</p>}
+                      />
+                    </div>
                   );
                 })}
               {post.comments.length > 2 && (
@@ -162,12 +164,14 @@ function Home(props) {
                 </a>
               )}
               <Input
+                className={styles.commentfield}
                 placeholder="Add a comment..."
                 value={commentText[post._id] || ""}
                 onChange={(e) => handleCommentChange(post._id, e.target.value)}
                 onPressEnter={() => handleCommentSubmit(post._id)}
               />
               <Button
+                className={styles.submitCommentBtn}
                 type="primary"
                 onClick={() => handleCommentSubmit(post._id)}
               >
