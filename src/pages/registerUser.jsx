@@ -16,7 +16,7 @@ const Register = () => {
     };
 
     apiKit
-      .post("http://localhost:8080/auth/register", JSON.stringify(payload), {
+      .post("/auth/register", JSON.stringify(payload), {
         headers: {
           "Content-Type": "application/json",
         },
