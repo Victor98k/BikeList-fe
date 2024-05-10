@@ -3,7 +3,7 @@ import { Form, Input, Button, message } from "antd";
 import apiKit from "../utils/ApiKit";
 import localStorageKit from "../utils/LocalStorageKit";
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/login.module.css"; // Import the CSS module
+import styles from "../styles/login.module.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,8 +11,8 @@ function Login() {
 
   const handleSubmit = (values) => {
     apiKit
-      // .post("http://localhost:8080/auth/login", values)
-      .post("https://storystream-fe.onrender.com/auth/login", values)
+      .post("http://localhost:8080/auth/login", values)
+      // .post("https://storystream-fe.onrender.com/auth/login", values)
       .then((response) => {
         const { tokens, user } = response.data;
         if (!tokens || !tokens.access) {
@@ -28,7 +28,7 @@ function Login() {
         const errorMessage =
           error.response?.data?.message ||
           "Failed to log in. Please check your credentials and try again.";
-        message.error(errorMessage); // Display an Ant Design error message
+        message.error(errorMessage);
       });
   };
 

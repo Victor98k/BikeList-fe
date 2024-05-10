@@ -17,8 +17,8 @@ function Home(props) {
 
   useEffect(() => {
     apiKit
-      // .get("http://localhost:8080/posts/")
-      .get("https://storystream-fe.onrender.com/posts/")
+      .get("http://localhost:8080/posts/")
+      // .get("https://storystream-fe.onrender.com/posts/")
       .then((response) => {
         const sortedPosts = response.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -50,15 +50,14 @@ function Home(props) {
     }
 
     try {
-      // const response = await apiKit.post("http://localhost:8080/comments", {
-      const response = await apiKit.post(
-        "https://storystream-fe.onrender.com/comments",
-        {
-          text: comment,
-          postId: postId,
-          author: username,
-        }
-      );
+      const response = await apiKit.post("http://localhost:8080/comments", {
+        // const response = await apiKit.post(
+        //   "https://storystream-fe.onrender.com/comments",
+        //   {
+        text: comment,
+        postId: postId,
+        author: username,
+      });
 
       if (response.status === 201) {
         setCommentText((prev) => ({ ...prev, [postId]: "" }));

@@ -42,10 +42,7 @@ function Nav({ onPostCreated }) {
         author: userId,
       });
 
-      console.log("Response:", response); // Log the full response
-
       if (response.status === 201) {
-        // Check for status 201 explicitly
         const newPost = response.data;
         message.success("New post created successfully!");
         setIsModalVisible(false);
