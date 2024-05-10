@@ -3,7 +3,7 @@ import apiKit from "../utils/ApiKit";
 import localStorageKit from "../utils/LocalStorageKit";
 import Nav from "../components/nav";
 import styles from "../styles/home.module.css";
-import { List, Avatar, Input, Button, Card } from "antd";
+import { List, Avatar, Input, Button, Card, message } from "antd";
 import { Comment } from "@ant-design/compatible";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +17,7 @@ function Home(props) {
 
   useEffect(() => {
     apiKit
-      .get("/posts") // Updated to use base URL from apiKit
+      .get("http://localhost:8080/posts/")
       .then((response) => {
         const sortedPosts = response.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -49,8 +49,7 @@ function Home(props) {
     }
 
     try {
-      const response = await apiKit.post("/comments", {
-        // Updated to use base URL from apiKit
+      const response = await apiKit.post("http://localhost:8080/comments", {
         text: comment,
         postId: postId,
         author: username,
@@ -71,11 +70,18 @@ function Home(props) {
             ...currentPosts.slice(index + 1),
           ];
         });
-      } else {
-        console.error("Failed to submit comment");
+        message.success("Comment added successfully!");
       }
     } catch (error) {
-      console.error("Failed to submit comment", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.error
+      ) {
+        message.error(error.response.data.error);
+      } else {
+        message.error("Failed to submit comment due to an unexpected error.");
+      }
     }
   };
 

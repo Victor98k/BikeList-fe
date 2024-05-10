@@ -4,10 +4,13 @@ class LocalStorageKit {
   STORAGE_TOKEN_KEY = "STORAGE_TOKEN_KEY";
   STORAGE_USERNAME_KEY = "username";
 
-  setTokenInStorage(token) {
-    console.log("Setting token in storage:", token); // This will confirm what you are trying to store
-    localStorage.setItem(this.STORAGE_TOKEN_KEY, token);
-    apiKit.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  setTokenInStorage(tokens) {
+    if (!tokens || !tokens.access) {
+      // console.error("Invalid token structure:", tokens);
+      return;
+    }
+    localStorage.setItem(this.STORAGE_TOKEN_KEY, JSON.stringify(tokens));
+    apiKit.defaults.headers.common["Authorization"] = `Bearer ${tokens.access}`;
   }
 
   getTokenFromStorage() {

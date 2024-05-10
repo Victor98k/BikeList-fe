@@ -8,8 +8,9 @@ const apiKit = axios.create({
 apiKit.interceptors.request.use(
   (config) => {
     const token = localStorageKit.getTokenFromStorage();
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+    if (token && token.access) {
+      // Ensure token.access is used
+      config.headers["Authorization"] = `Bearer ${token.access}`;
     }
     return config;
   },

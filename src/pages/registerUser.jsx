@@ -17,17 +17,20 @@ const Register = () => {
 
     apiKit
       // why no work?
-      .post("/auth/register", JSON.stringify(payload), {
+      .post("http://localhost:8080/auth/register", JSON.stringify(payload), {
         headers: {
           "Content-Type": "application/json",
         },
       })
+
       .then((response) => {
         const token = response.data;
         localStorageKit.setTokenInStorage(token);
         navigate("/");
       })
+
       .catch((error) => {
+        console.log("Sending payload:", JSON.stringify(payload));
         console.error("Error in registering user: ", error.response);
         const errors = error.response.data.errors;
         console.error("Server-side errors:", errors);

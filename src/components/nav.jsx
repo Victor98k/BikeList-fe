@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Input } from "antd";
+import { Modal, Button, Input, message } from "antd"; // Import message from antd
 import Styles from "../styles/nav.module.css";
 import apiKit from "../utils/ApiKit"; // Import apiKit
 
@@ -34,7 +34,7 @@ function Nav({ onPostCreated }) {
 
     // Use apiKit for the POST request
     try {
-      const response = await apiKit.post("/posts/post", {
+      const response = await apiKit.post("http://localhost:8080/posts/post", {
         title,
         description,
         imageUrl,
@@ -42,17 +42,19 @@ function Nav({ onPostCreated }) {
         author: userId,
       });
 
-      if (response.status === 200) {
-        // Check for status 200 explicitly
+      console.log("Response:", response); // Log the full response
+
+      if (response.status === 201) {
+        // Check for status 201 explicitly
         const newPost = response.data;
-        alert("New post created successfully!");
+        message.success("New post created successfully!");
         setIsModalVisible(false);
         onPostCreated(newPost);
       } else {
-        alert(`Failed to create new post: ${response.data.error}`);
+        message.error(`Failed to create new post: ${response.data.error}`);
       }
     } catch (error) {
-      alert(`Failed to create new post: ${error.message}`);
+      message.error(`Failed to create new post: ${error.message}`);
     }
   };
 

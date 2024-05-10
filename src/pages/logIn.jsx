@@ -1,45 +1,33 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, message } from "antd";
 import apiKit from "../utils/ApiKit";
 import localStorageKit from "../utils/LocalStorageKit";
-import styles from "../styles/login.module.css";
+import { useNavigate } from "react-router-dom";
+import styles from "../styles/login.module.css"; // Import the CSS module
 
 function Login() {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    setError(null);
-    const { email, password } = values;
-
+  const handleSubmit = (values) => {
     apiKit
-      .post("/auth/login", {
-        email,
-        password,
-      })
+      .post("http://localhost:8080/auth/login", values)
       .then((response) => {
-        console.log("Login response:", response.data); // This will show what you're receiving from the server
-        if (!response.data) {
-          throw new Error("No data received from server");
-        }
         const { tokens, user } = response.data;
-        if (!tokens || !user) {
-          throw new Error("Incomplete data received from server");
+        if (!tokens || !tokens.access) {
+          throw new Error("Access token not received");
         }
-        localStorageKit.setTokenInStorage(tokens.access);
+        localStorageKit.setTokenInStorage(tokens);
         localStorage.setItem("userId", user.id);
         localStorage.setItem("username", user.username);
         navigate("/home");
       })
       .catch((error) => {
-        console.error("Login error:", error); // Log the entire error
-        const message =
+        console.error("Login error:", error);
+        const errorMessage =
           error.response?.data?.message ||
-          error.message ||
-          "An unexpected error occurred";
-        console.warn("Error logging in", message);
-        setError(message);
+          "Failed to log in. Please check your credentials and try again.";
+        message.error(errorMessage); // Display an Ant Design error message
       });
   };
 
@@ -49,37 +37,40 @@ function Login() {
 
   return (
     <div className={styles.loginContainer}>
-      <Form
-        name="loginForm"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        className={styles.formContainer}
-      >
-        <Form.Item>
-          <h1>Story Stream</h1>
-        </Form.Item>
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your Email!" }]}
+      <div className={styles.formContainer}>
+        <h1 className={styles.formTitle}>StoryStream</h1>
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          id="login-form"
+          layout="vertical"
         >
-          <Input placeholder="Email" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
-          <Input.Password placeholder="Password" />
-        </Form.Item>
-        {error && <p>{error}</p>}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Login
-          </Button>
-          <Button type="link" onClick={handleRegisterClick}>
-            Register
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            className={styles.formItem}
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Please input your email!" }]}
+          >
+            <Input placeholder="Email" />
+          </Form.Item>
+          <Form.Item
+            className={styles.formItem}
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Login
+            </Button>
+            <Button type="link" onClick={handleRegisterClick}>
+              Register
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 }
