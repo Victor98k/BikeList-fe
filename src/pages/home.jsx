@@ -89,11 +89,11 @@ function Home(props) {
     }
   };
 
-  const handleLogOut = () => {
-    localStorageKit.deleteTokenFromStorage();
-    localStorage.removeItem("username");
-    navigate("/");
-  };
+  // const handleLogOut = () => {
+  //   localStorageKit.deleteTokenFromStorage();
+  //   localStorage.removeItem("username");
+  //   navigate("/");
+  // };
 
   const handlePostCreated = (newPost) => {
     setAllPosts((prevPosts) => {
@@ -106,7 +106,7 @@ function Home(props) {
   return (
     <div className={styles.postContainer}>
       <Nav onPostCreated={handlePostCreated} />{" "}
-      <Button onClick={handleLogOut}>Log Out</Button>
+      {/* <Button onClick={handleLogOut}>Log Out</Button> */}
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       <List

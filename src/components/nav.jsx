@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Modal, Button, Input, message } from "antd"; // Import message from antd
+import { Modal, Button, Input, message, Avatar } from "antd";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import Styles from "../styles/nav.module.css";
-import apiKit from "../utils/ApiKit"; // Import apiKit
-import logo from "../assets/logo.png";
+import apiKit from "../utils/ApiKit";
+import localStorageKit from "../utils/LocalStorageKit"; // Ensure you import localStorageKit
 
 function Nav({ onPostCreated }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -11,6 +12,7 @@ function Nav({ onPostCreated }) {
   const [imageUrl, setImageUrl] = useState("");
   const [location, setLocation] = useState("");
   const [author, setAuthor] = useState(localStorage.getItem("userId") || "");
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -33,7 +35,6 @@ function Nav({ onPostCreated }) {
       return;
     }
 
-    // Use apiKit for the POST request
     try {
       const response = await apiKit.post("http://localhost:8080/posts/post", {
         title,
@@ -60,11 +61,19 @@ function Nav({ onPostCreated }) {
     setIsModalVisible(false);
   };
 
+  const handleLogOut = () => {
+    localStorageKit.deleteTokenFromStorage();
+    localStorage.removeItem("username");
+    navigate("/");
+  };
+
+  const username = localStorage.getItem("username");
+  const initial = username ? username.charAt(0).toUpperCase() : "U";
+
   return (
     <div className={Styles.navContainer}>
+      <h1 className={Styles.logo}>StoryStream</h1>
       <ul className={Styles.navLinks}>
-        <h1 className={Styles.logo}>StoryStream</h1>
-
         <li className={Styles.links}>
           <a className={Styles.link} onClick={showModal}>
             Post
@@ -74,9 +83,21 @@ function Nav({ onPostCreated }) {
           <a className={Styles.link}>Message</a>
         </li>
         <li className={Styles.links}>
-          <a className={Styles.linkcontact}>Profile</a>
+          <a className={Styles.link}>Profile</a>
         </li>
       </ul>
+      <div className={Styles.userProfile}>
+        <Avatar
+          src={`https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`}
+          className={Styles.avatar}
+        />
+        <p>
+          Logged in as <strong>{username || "Unknown User"}</strong>
+        </p>
+        <Button onClick={handleLogOut} className={Styles.link}>
+          Log Out
+        </Button>
+      </div>
       <Modal
         title="Create a New Post"
         visible={isModalVisible}
