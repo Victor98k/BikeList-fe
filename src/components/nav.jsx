@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Button, Input, message, Avatar } from "antd";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
 import Styles from "../styles/nav.module.css";
 import apiKit from "../utils/ApiKit";
-import localStorageKit from "../utils/LocalStorageKit"; // Ensure you import localStorageKit
+import localStorageKit from "../utils/LocalStorageKit";
 
 function Nav({ onPostCreated }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -72,18 +72,19 @@ function Nav({ onPostCreated }) {
 
   return (
     <div className={Styles.navContainer}>
-      <h1 className={Styles.logo}>StoryStream</h1>
+      <h1 className={Styles.logo}>BikeList</h1>
+      {/* <p>MC försäljning</p> */}
       <ul className={Styles.navLinks}>
         <li className={Styles.links}>
           <a className={Styles.link} onClick={showModal}>
-            Post
+            POST
           </a>
         </li>
         <li className={Styles.links}>
-          <a className={Styles.link}>Message</a>
+          {/* <a className={Styles.link}>Message</a> */}
         </li>
         <li className={Styles.links}>
-          <a className={Styles.link}>Profile</a>
+          {/* <a className={Styles.link}>Profile</a> */}
         </li>
       </ul>
       <div className={Styles.userProfile}>

@@ -13,7 +13,7 @@ function Home(props) {
   const [error, setError] = useState(null);
   const [commentText, setCommentText] = useState({});
   const [expandedComments, setExpandedComments] = useState({});
-  const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     apiKit
@@ -31,6 +31,33 @@ function Home(props) {
         setIsLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchUserDetails = async (userId) => {
+      try {
+        const response = await apiKit.get(
+          `http://localhost:8080/users/${userId}`
+        );
+        setUserDetails((prev) => ({
+          ...prev,
+          [userId]: response.data.username,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+        // Set a default or placeholder username in case of an error
+        setUserDetails((prev) => ({
+          ...prev,
+          [userId]: "Unknown",
+        }));
+      }
+    };
+
+    allPosts.forEach((post) => {
+      if (post.author && !userDetails[post.author]) {
+        fetchUserDetails(post.author);
+      }
+    });
+  }, [allPosts]);
 
   const handleCommentChange = (postId, text) => {
     setCommentText((prev) => ({ ...prev, [postId]: text }));
@@ -51,9 +78,6 @@ function Home(props) {
 
     try {
       const response = await apiKit.post("http://localhost:8080/comments", {
-        // const response = await apiKit.post(
-        //   "https://storystream-fe.onrender.com/comments",
-        //   {
         text: comment,
         postId: postId,
         author: username,
@@ -89,12 +113,6 @@ function Home(props) {
     }
   };
 
-  // const handleLogOut = () => {
-  //   localStorageKit.deleteTokenFromStorage();
-  //   localStorage.removeItem("username");
-  //   navigate("/");
-  // };
-
   const handlePostCreated = (newPost) => {
     setAllPosts((prevPosts) => {
       const updatedPosts = [newPost, ...prevPosts];
@@ -106,16 +124,13 @@ function Home(props) {
   return (
     <div className={styles.postContainer}>
       <Nav onPostCreated={handlePostCreated} />{" "}
-      {/* <Button onClick={handleLogOut}>Log Out</Button> */}
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       <List
         itemLayout="vertical"
         size="large"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
+          onChange: (page) => {},
           pageSize: 10,
         }}
         dataSource={allPosts}
@@ -125,12 +140,33 @@ function Home(props) {
             title={<h3>{post.title}</h3>}
             className={styles.posts}
           >
-            <p>{post.description}</p>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
+              <span style={{ marginRight: "10px" }}>Posted by:</span>
+
+              <span style={{ marginLeft: "10px" }}>
+                {userDetails[post.author]
+                  ? userDetails[post.author]
+                  : "Unknown"}
+              </span>
+              <Avatar
+                className={styles.postAvatar}
+                style={{ marginRight: "10px" }}
+                src={`https://ui-avatars.com/api/?name=${
+                  userDetails[post.author] ? userDetails[post.author][0] : "U"
+                }&background=random&color=fff`}
+              />
+            </div>
+            <p className={styles.postDescription}>{post.description}</p>
             <img src={post.imageUrl} alt="" className={styles.postImage} />
             <div className={styles.commentSection}>
-              {post.comments
-                .slice(0, expandedComments[post._id] ? post.comments.length : 2)
-                .map((comment) => {
+              {expandedComments[post._id] &&
+                post.comments.map((comment) => {
                   const initial = comment.author
                     ? comment.author.charAt(0).toUpperCase()
                     : "U";
@@ -149,20 +185,19 @@ function Home(props) {
                     </div>
                   );
                 })}
-              {post.comments.length > 2 && (
-                <a
-                  onClick={() => {
-                    setExpandedComments((prev) => ({
-                      ...prev,
-                      [post._id]: !prev[post._id],
-                    }));
-                  }}
-                >
-                  {expandedComments[post._id]
-                    ? "See less comments"
-                    : "See all comments"}
-                </a>
-              )}
+              <a
+                className={styles.seeCommentsLink}
+                onClick={() => {
+                  setExpandedComments((prev) => ({
+                    ...prev,
+                    [post._id]: !prev[post._id],
+                  }));
+                }}
+              >
+                {expandedComments[post._id]
+                  ? "See less comments"
+                  : "See all comments"}
+              </a>
               <Input
                 className={styles.commentfield}
                 placeholder="Add a comment..."
