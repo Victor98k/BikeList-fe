@@ -73,18 +73,17 @@ function Nav({ onPostCreated }) {
   return (
     <div className={Styles.navContainer}>
       <h1 className={Styles.logo}>BikeList</h1>
-      {/* <p>MC försäljning</p> */}
       <ul className={Styles.navLinks}>
         <li className={Styles.links}>
-          <a className={Styles.link} onClick={showModal}>
-            POST
-          </a>
+          <button className={Styles.newAnnonsBtn} onClick={showModal}>
+            Ny annons
+          </button>
         </li>
         <li className={Styles.links}>
-          {/* <a className={Styles.link}>Message</a> */}
+          <a className={Styles.link}>Meddelanden</a>
         </li>
         <li className={Styles.links}>
-          {/* <a className={Styles.link}>Profile</a> */}
+          <a className={Styles.link}>Bevakningar</a>
         </li>
       </ul>
       <div className={Styles.userProfile}>
@@ -93,7 +92,7 @@ function Nav({ onPostCreated }) {
           className={Styles.avatar}
         />
         <p>
-          Logged in as <strong>{username || "Unknown User"}</strong>
+          <strong>{username || "Unknown User"}</strong>
         </p>
         <Button onClick={handleLogOut} className={Styles.link}>
           Log Out

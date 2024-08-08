@@ -9,15 +9,17 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border-radius: 8px;
-  padding: 5rem;
+  border-radius: 10px;
+  padding: 2rem; /* Reduced padding */
+
   border-bottom: 1px solid grey;
   /* background-color: #424242; */
   color: F7F8F9;
 }
 
 .posts {
-  padding: 1rem;
+  margin-top: 4rem;
+  padding: 2rem;
   margin-bottom: 2rem;
   width: 25rem;
   height: auto;

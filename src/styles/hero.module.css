@@ -1,0 +1,28 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Adjust height as needed */
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.searchBarContainer {
+  padding-top: 13rem;
+  position: absolute;
+  top: 50%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.searchBar {
+  width: 30%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 2%;
+}

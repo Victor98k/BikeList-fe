@@ -6,6 +6,7 @@ import styles from "../styles/home.module.css";
 import { List, Avatar, Input, Button, Card, message } from "antd";
 import { Comment } from "@ant-design/compatible";
 import { useNavigate } from "react-router-dom";
+import Hero from "../components/hero";
 
 function Home(props) {
   const [allPosts, setAllPosts] = useState([]);
@@ -126,6 +127,7 @@ function Home(props) {
       <Nav onPostCreated={handlePostCreated} />{" "}
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
+      <Hero />
       <List
         itemLayout="vertical"
         size="large"

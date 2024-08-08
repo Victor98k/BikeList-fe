@@ -38,8 +38,8 @@ function Login() {
 
   return (
     <div className={styles.loginContainer}>
-      <div className={styles.formContainer}>
-        <h1 className={styles.formTitle}>StoryStream</h1>
+      <div className={styles.form}>
+        <h1 className={styles.formTitle}>Welcome 2 BikeList</h1>
         <Form
           form={form}
           onFinish={handleSubmit}
@@ -52,7 +52,7 @@ function Login() {
             label="Email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input placeholder="Email" />
+            <Input className={styles.input} placeholder="Email" />
           </Form.Item>
           <Form.Item
             className={styles.formItem}
@@ -60,14 +60,17 @@ function Login() {
             label="Password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password placeholder="Password" />
+            <Input.Password className={styles.input} placeholder="Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Login
-            </Button>
-            <Button type="link" onClick={handleRegisterClick}>
+            <Button
+              className={styles.buttonSubmit}
+              onClick={handleRegisterClick}
+            >
               Register
+            </Button>
+            <Button className={styles.btn} type="primary" htmlType="submit">
+              Login
             </Button>
           </Form.Item>
         </Form>
